@@ -19,7 +19,7 @@ export const Signup = () => {
 
 		try {
             const response = await axios.post(
-                process.env.BACKEND_URL+"/signup",
+                `${process.env.BACKEND_URL}/api/register`,
                 formData,
                 {
                     headers: {
@@ -28,13 +28,20 @@ export const Signup = () => {
                     }
                 }
             );
-            navigate("/login")
+			if (response.status === 201) {
+				navigate("/login");
+			} else {
+				console.error("Error al registrar", response.data.message);
+			}
         } catch (error) {
-            console.error("Error al registrar", error);
-        }
+			console.error("Error al registrar", error);
+			if (error.response) {
+				console.error("Response data:", error.response.data);
+			}
+		}
+		
 	}
 	
-
 
 	return (
 		<div className="container mt-5">
